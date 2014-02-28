@@ -18,8 +18,6 @@ Gem::Specification.new do |s|
   s.files        = Dir['README.md', 'lib/**/*']
   s.require_path = 'lib'
 
-  # s.add_dependency('mime-types', ['~> 1.17'])
-
-  # s.add_development_dependency('rake')
-  # s.add_development_dependency('rspec', ['~> 2.7.0'])
+  s.add_dependency('msgpack', ['~> 0.5.8'])       if RUBY_ENGINE == 'ruby'  
+  s.add_dependency('msgpack-jruby', ['~> 1.4.0']) if RUBY_ENGINE == 'jruby'
 end

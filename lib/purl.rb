@@ -1,5 +1,4 @@
-require 'pry'
-require 'singleton'
+# require 'pry'
 require 'net/http'
 require 'uri'
 require 'cgi'
@@ -9,8 +8,6 @@ require 'msgpack'
 require 'purl/version'
 
 class Purl
-  include Singleton
-
   MAXTIME = 45 # timeout in seconds to complete parallel get
 
   class ConfigError < StandardError; end
@@ -19,6 +16,10 @@ class Purl
 
   class << self
     attr_accessor :service_uri, :maxtime
+
+    def instance
+      Thread.current[:purl_instance] ||= self.new
+    end
 
     def get(urls, options={})
       instance.get(urls, options)
@@ -34,7 +35,7 @@ class Purl
   end
 
   def http
-    Thread.current[:purlconn] ||= Net::HTTP.new(service_uri.host, service_uri.port)
+    @http ||= Net::HTTP.new(service_uri.host, service_uri.port)
   end
 
   def get(urls, options={})
@@ -59,7 +60,6 @@ class Purl
 
     obj
   end
-
 
   private
 

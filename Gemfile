@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
-# gemspec
+gemspec
 
-gem 'msgpack', platform: :mri
-gem 'msgpack-jruby', platform: :jruby
+# gem 'msgpack', platform: :mri
+# gem 'msgpack-jruby', platform: :jruby
 
 group :development, :test do
   gem 'pry'
