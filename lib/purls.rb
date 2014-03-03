@@ -1,9 +1,16 @@
-# require 'pry'
+begin
+  require 'msgpack'
+rescue LoadError
+  $stderr.puts "Sorry, cannot load 'purls' gem. Make sure you specify in your Gemfile:"
+  $stderr.puts "gem 'msgpack', platform: :mri"
+  $stderr.puts "gem 'msgpack-jruby', platform: :jruby"
+  exit!
+end
+
 require 'net/http'
 require 'uri'
 require 'cgi'
 require 'openssl'
-require 'msgpack'
 
 require 'purls/version'
 
