@@ -5,20 +5,20 @@ require 'cgi'
 require 'openssl'
 require 'msgpack'
 
-require 'purl/version'
+require 'purls/version'
 
-class Purl
+class Purls
   MAXTIME = 45 # timeout in seconds to complete parallel get
 
   class ConfigError < StandardError; end
+  class SocketError < StandardError; end
   class FetchError < StandardError; end
-  class ConnectionError < FetchError; end
 
   class << self
     attr_accessor :service_uri, :maxtime
 
     def instance
-      Thread.current[:purl_instance] ||= self.new
+      Thread.current[:purls_instance] ||= self.new
     end
 
     def get(urls, options={})
@@ -28,9 +28,9 @@ class Purl
 
   def initialize
     if self.class.service_uri.nil?
-      raise ConfigError.new("You must set Purl.service_uri")
+      raise ConfigError.new("You must set Purls.service_uri")
     end
-    self.class.service_uri = URI.parse(service_uri)
+    self.class.service_uri = URI.parse(service_uri) if service_uri.is_a?(String)
     self.class.maxtime ||= MAXTIME # set default timeout
   end
 
@@ -39,19 +39,24 @@ class Purl
   end
 
   def get(urls, options={})
-    q = urls.map {|u| "url[]=#{CGI.escape(u)}" }.join('&')
-    uri = "#{service_uri}/fetch?#{q}"
-    obj = nil
+    maxtime = options[:maxtime] || self.class.maxtime
+    q = urls.map {|u| "url[]=#{CGI.escape(u)}" rescue nil }.compact.join('&')
+    return [] if q.empty?
 
+    uri = service_uri.dup
+    uri.path = '/fetch'
+    uri.query = q + "&maxtime=#{maxtime}"
+
+    obj = nil
     begin
-      resp = http.get(uri, {})
+      resp = http.get(uri.to_s, {})
       if resp.header['Content-Type'].index('x-msgpack')
         obj = MessagePack.unpack(resp.body)
       else
         obj = resp.body
       end
     rescue => ex
-      raise FetchError.new(ex.inspect)
+      raise SocketError.new(ex.inspect)
     end
 
     if resp.code.to_i != 200

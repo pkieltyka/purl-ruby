@@ -1,4 +1,4 @@
-# Purl ruby client
+# Purls ruby client
 
 <will add desc later>
 +is-thread-safe

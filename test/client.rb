@@ -1,6 +1,6 @@
 require 'bundler/setup'
 $:.unshift File.expand_path('../../lib', __FILE__)
-require 'purl'
+require 'purls'
 
 MAXTIME = 30
 
@@ -16,10 +16,10 @@ urls = [
   'http://faasdfasfdf23f23f23fwfasdf.com'
 ]
 
-Purl.service_uri = 'http://localhost:9333'
-Purl.maxtime = MAXTIME
+Purls.service_uri = 'http://localhost:9333'
+Purls.maxtime = MAXTIME
 
-obj = Purl.get(urls)#, { maxtime: MAXTIME })
+obj = Purls.get(urls)#, { maxtime: MAXTIME })
 puts obj.inspect
 
 # puts
@@ -28,5 +28,5 @@ puts obj.inspect
 # puts "Sleeping for 5... then doing it again.."
 # sleep 5
 
-# obj = Purl.get(urls)#, { maxtime: MAXTIME })
+# obj = Purls.get(urls)#, { maxtime: MAXTIME })
 # puts obj.inspect

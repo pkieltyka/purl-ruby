@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path('../lib', __FILE__)
-require 'purl/version'
+require 'purls/version'
 
 Gem::Specification.new do |s|
-  s.name        = 'purl'
-  s.version     = Purl::VERSION
+  s.name        = 'purls'
+  s.version     = Purls::VERSION
   s.platform    = Gem::Platform::RUBY
   s.summary     = '...'
   s.description = s.summary
 
   s.authors     = ['Peter Kieltyka']
   s.email       = ['peter@pressly.com']
-  s.homepage    = 'https://github.com/pkieltyka/purl-ruby'
+  s.homepage    = 'https://github.com/pkieltyka/purls-ruby'
   
   s.required_rubygems_version = ">= 1.3.6"
   
@@ -20,4 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('msgpack', ['~> 0.5.8'])       if RUBY_ENGINE == 'ruby'  
   s.add_dependency('msgpack-jruby', ['~> 1.4.0']) if RUBY_ENGINE == 'jruby'
+
+  # s.add_development_dependency 'rake-compiler'
+  s.add_development_dependency 'rake'
 end
